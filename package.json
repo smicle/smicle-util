@@ -1,0 +1,25 @@
+{
+  "name": "smicle-util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smicle/smicleUtil.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smicle/smicleUtil/issues"
+  },
+  "homepage": "https://github.com/smicle/smicleUtil#readme",
+  "dependencies": {
+    "@types/readline-sync": "^1.4.3",
+    "readline-sync": "^1.4.9",
+    "typescript": "^3.4.5"
+  }
+}
