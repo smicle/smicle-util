@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var smicle = require("../util");
+var util = require("../util");
 Array.prototype._empty = function () {
     return this.length === 0;
 };
@@ -31,7 +31,7 @@ Array.prototype._first = function (n) {
         return this[0];
     }
     else {
-        return smicle.range(n).map(function (i) { return _this[i]; });
+        return util.range(n).map(function (i) { return _this[i]; });
     }
 };
 Array.prototype._last = function (n) {
@@ -60,11 +60,11 @@ Array.prototype._drop$ = function (n) {
     return this.splice(n);
 };
 Array.prototype._sample = function () {
-    var n = smicle.randInt(this.length);
+    var n = util.randInt(this.length);
     return this[n];
 };
 Array.prototype._sample$ = function () {
-    var n = smicle.randInt(this.length);
+    var n = util.randInt(this.length);
     return this._remove(n);
 };
 Array.prototype._asc = function (s) {
@@ -120,12 +120,12 @@ Array.prototype._rotate$ = function (n) {
 };
 Array.prototype._shuffle = function () {
     var a = this.concat();
-    return smicle.range(this.length).map(function (_) { return a._sample$(); });
+    return util.range(this.length).map(function (_) { return a._sample$(); });
 };
 Array.prototype._shuffle$ = function () {
     var _this = this;
     var a = this.concat();
-    smicle.range(this.length).forEach(function (i) { return (_this[i] = a._sample$()); });
+    util.range(this.length).forEach(function (i) { return (_this[i] = a._sample$()); });
     return this;
 };
 Array.prototype._flat = function () {
