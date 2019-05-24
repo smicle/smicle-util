@@ -1,1 +1,1 @@
-# smicleUtil
+# smicle-util
