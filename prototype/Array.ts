@@ -39,6 +39,8 @@ declare global {
     _remove$(...n: number[]): any | any[]
     _insert(n: number, ...m: any[]): any[]
     _insert$(n: number, ...m: any[]): any[]
+    _compact(): any[]
+    _compact$(): any[]
   }
 }
 
@@ -255,4 +257,16 @@ Array.prototype._insert = function(n: number, ...m: any[]): any[] {
 Array.prototype._insert$ = function(n: number, ...m: any[]): any[] {
   this.splice(n, 0, ...m._flat())
   return this
+}
+
+Array.prototype._compact = function(): any[] {
+  return this.filter(v => v !== null)
+    .filter(v => v !== undefined)
+    .filter(v => v !== NaN)
+}
+Array.prototype._compact$ = function(): any[] {
+  const a = this.filter(v => v !== null)
+    .filter(v => v !== undefined)
+    .filter(v => v !== NaN)
+  return this._copy(a)
 }
