@@ -1,4 +1,4 @@
-import * as smicle from '../Function'
+import * as util from '../util'
 
 declare global {
   interface Array<T> {
@@ -74,7 +74,7 @@ Array.prototype._first = function(n = 1): any | any[] {
   if (n === 1) {
     return this[0]
   } else {
-    return smicle.range(n).map(i => this[i])
+    return util.range(n).map(i => this[i])
   }
 }
 
@@ -106,11 +106,11 @@ Array.prototype._drop$ = function(n: number): any[] {
 }
 
 Array.prototype._sample = function(): any[] {
-  const n = smicle.randInt(this.length)
+  const n = util.randInt(this.length)
   return this[n]
 }
 Array.prototype._sample$ = function() {
-  const n = smicle.randInt(this.length)
+  const n = util.randInt(this.length)
   return this._remove(n)
 }
 
@@ -160,11 +160,11 @@ Array.prototype._rotate$ = function(n = 1): any[] {
 
 Array.prototype._shuffle = function(): any[] {
   const a = this.concat()
-  return smicle.range(this.length).map(_ => a._sample$())
+  return util.range(this.length).map(_ => a._sample$())
 }
 Array.prototype._shuffle$ = function(): any[] {
   const a = this.concat()
-  smicle.range(this.length).forEach(i => (this[i] = a._sample$()))
+  util.range(this.length).forEach(i => (this[i] = a._sample$()))
   return this
 }
 

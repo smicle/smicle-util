@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var smicle = require("../Function");
+var smicle = require("../util");
 Array.prototype._empty = function () {
     return this.length === 0;
 };
@@ -69,12 +69,12 @@ Array.prototype._sample$ = function () {
 };
 Array.prototype._asc = function (s) {
     if (s === void 0) { s = ''; }
-    var l = this.concat();
+    var p = this.concat();
     if (s === '') {
-        return l.sort(function (a, b) { return a - b; });
+        return p.sort(function (a, b) { return a - b; });
     }
     else {
-        return l.sort(function (a, b) { return a[s] - b[s]; });
+        return p.sort(function (a, b) { return a[s] - b[s]; });
     }
 };
 Array.prototype._asc$ = function (s) {
@@ -88,12 +88,12 @@ Array.prototype._asc$ = function (s) {
 };
 Array.prototype._desc = function (s) {
     if (s === void 0) { s = ''; }
-    var l = this.concat();
+    var p = this.concat();
     if (s === '') {
-        return l.sort(function (a, b) { return b - a; });
+        return p.sort(function (a, b) { return b - a; });
     }
     else {
-        return l.sort(function (a, b) { return b[s] - a[s]; });
+        return p.sort(function (a, b) { return b[s] - a[s]; });
     }
 };
 Array.prototype._desc$ = function (s) {
@@ -138,6 +138,30 @@ Array.prototype._flat$ = function () {
         .split(',')
         .map(Number);
     return this._copy(a);
+};
+Array.prototype._zip = function () {
+    var a = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
+    }
+    return this.map(function (v, i) { return [v].concat(a.map(function (e) { return (e[i] ? e[i] : null); })); });
+};
+Array.prototype._zip$ = function () {
+    var a = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i] = arguments[_i];
+    }
+    var p = this.map(function (v, i) { return [v].concat(a.map(function (e) { return (e[i] ? e[i] : null); })); });
+    return this._copy(p);
+};
+Array.prototype._transpose = function () {
+    var _a = this, a = _a[0], b = _a[1];
+    return a.map(function (v, i) { return [v, b[i]]; });
+};
+Array.prototype._transpose$ = function () {
+    var _a = this, a = _a[0], b = _a[1];
+    var p = a.map(function (v, i) { return [v, b[i]]; });
+    return this._copy(p);
 };
 Array.prototype._copy = function (a) {
     var _this = this;
