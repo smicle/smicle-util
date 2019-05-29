@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
         "module": "CommonJS",
         "target": "es5",
         "jsx": "react",
@@ -8,9 +7,11 @@
         "moduleResolution": "node",
         "removeComments": true,
         "strict": true,
+        "noImplicitAny": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        // "sourceMap": true
     }
 }

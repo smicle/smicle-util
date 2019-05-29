@@ -238,3 +238,14 @@ Array.prototype._insert$ = function (n) {
     this.splice.apply(this, [n, 0].concat(m._flat()));
     return this;
 };
+Array.prototype._compact = function () {
+    return this.filter(function (v) { return v !== null; })
+        .filter(function (v) { return v !== undefined; })
+        .filter(function (v) { return v !== NaN; });
+};
+Array.prototype._compact$ = function () {
+    var a = this.filter(function (v) { return v !== null; })
+        .filter(function (v) { return v !== undefined; })
+        .filter(function (v) { return v !== NaN; });
+    return this._copy(a);
+};

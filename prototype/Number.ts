@@ -1,7 +1,6 @@
 export {}
 declare global {
   interface Number {
-    _num(): number
     _str(): string
     _abs(): number
     _floor(): number
@@ -9,22 +8,18 @@ declare global {
   }
 }
 
-Number.prototype._num = function(): number {
-  return Number(this)
-}
-
 Number.prototype._str = function(): string {
   return String(this)
 }
 
 Number.prototype._abs = function(): number {
-  return Math.abs(this._num())
+  return Math.abs(this as number)
 }
 
 Number.prototype._floor = function(): number {
-  return Math.floor(this._num())
+  return Math.floor(this as number)
 }
 
 Number.prototype._minusOnlyZero = function(): number {
-  return this._num() < 0 ? 0 : this._num()
+  return (this as number) < 0 ? 0 : (this as number)
 }
