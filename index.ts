@@ -1,4 +1,7 @@
-import './prototype/Prototype'
+import './prototype/prototype'
+import * as readlineSync from 'readline-sync'
+
+export const input = (s = ''): string => readlineSync.question(s)
 
 export const rand = (n: number): number => Math.random() * n
 

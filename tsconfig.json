@@ -5,6 +5,7 @@
         "jsx": "react",
         "lib": ["es2018", "dom"],
         "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
         "removeComments": true,
         "strict": true,
         "noImplicitAny": true,
@@ -12,6 +13,8 @@
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
+        "allowJs": true,
+        "watch": true,
         // "sourceMap": true
     }
 }

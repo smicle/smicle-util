@@ -1,4 +1,4 @@
-import * as util from '../util'
+import * as _util from '../index'
 
 declare global {
   interface Array<T> {
@@ -35,8 +35,8 @@ declare global {
     _clear(): any[]
     _delete(s: any): any[]
     _delete$(s: any): any[]
-    _remove(...n: number[]): any | any[]
-    _remove$(...n: number[]): any | any[]
+    _remove(...n: number[]): any[]
+    _remove$(...n: number[]): any[]
     _insert(n: number, ...m: any[]): any[]
     _insert$(n: number, ...m: any[]): any[]
     _compact(): any[]
@@ -76,7 +76,7 @@ Array.prototype._first = function(n = 1): any | any[] {
   if (n === 1) {
     return this[0]
   } else {
-    return util.range(n).map(i => this[i])
+    return _util.range(n).map(i => this[i])
   }
 }
 
@@ -108,11 +108,11 @@ Array.prototype._drop$ = function(n: number): any[] {
 }
 
 Array.prototype._sample = function(): any[] {
-  const n = util.randInt(this.length)
+  const n = _util.randInt(this.length)
   return this[n]
 }
 Array.prototype._sample$ = function() {
-  const n = util.randInt(this.length)
+  const n = _util.randInt(this.length)
   return this._remove(n)
 }
 
@@ -162,18 +162,18 @@ Array.prototype._rotate$ = function(n = 1): any[] {
 
 Array.prototype._shuffle = function(): any[] {
   const a = this.concat()
-  return util.range(this.length).map(_ => a._sample$())
+  return _util.range(this.length).map(_ => a._sample$())
 }
 Array.prototype._shuffle$ = function(): any[] {
   const a = this.concat()
-  util.range(this.length).forEach(i => (this[i] = a._sample$()))
+  _util.range(this.length).forEach(i => (this[i] = a._sample$()))
   return this
 }
 
 Array.prototype._flat = function(): any[] {
   return this.toString()
     .split(',')
-    .map(Number)
+    .map(v => v._num())
 }
 Array.prototype._flat$ = function(): any[] {
   const a = this.toString()
@@ -236,10 +236,10 @@ Array.prototype._remove = function(...n: number[]): any | any[] {
     return a.filter(v => !n.includes(v))
   }
 }
-Array.prototype._remove$ = function(...n: number[]): any | any[] {
+Array.prototype._remove$ = function(...n: number[]): any[] {
   n._flat$()
   if (n.length === 0) {
-    return undefined
+    return this
   } else if (n.length === 1) {
     this.splice(n._first(), 1)._first()
     return this
@@ -251,22 +251,18 @@ Array.prototype._remove$ = function(...n: number[]): any | any[] {
 
 Array.prototype._insert = function(n: number, ...m: any[]): any[] {
   const a = this.concat()
-  a.splice(n, 0, ...m._flat())
-  return a
+  return a._insert$(n, m)
 }
 Array.prototype._insert$ = function(n: number, ...m: any[]): any[] {
+  console.log(...m._flat())
   this.splice(n, 0, ...m._flat())
   return this
 }
 
 Array.prototype._compact = function(): any[] {
-  return this.filter(v => v !== null)
-    .filter(v => v !== undefined)
-    .filter(v => v !== NaN)
+  return this.filter(v => v)
 }
 Array.prototype._compact$ = function(): any[] {
-  const a = this.filter(v => v !== null)
-    .filter(v => v !== undefined)
-    .filter(v => v !== NaN)
+  const a = this._compact()
   return this._copy(a)
 }

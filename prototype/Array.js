@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var util = require("../util");
+var util = require("../index");
 Array.prototype._empty = function () {
     return this.length === 0;
 };
@@ -131,7 +131,7 @@ Array.prototype._shuffle$ = function () {
 Array.prototype._flat = function () {
     return this.toString()
         .split(',')
-        .map(Number);
+        .map(function (v) { return v._num(); });
 };
 Array.prototype._flat$ = function () {
     var a = this.toString()
@@ -210,7 +210,7 @@ Array.prototype._remove$ = function () {
     }
     n._flat$();
     if (n.length === 0) {
-        return undefined;
+        return this;
     }
     else if (n.length === 1) {
         this.splice(n._first(), 1)._first();
@@ -227,25 +227,37 @@ Array.prototype._insert = function (n) {
         m[_i - 1] = arguments[_i];
     }
     var a = this.concat();
-    a.splice.apply(a, [n, 0].concat(m._flat()));
-    return a;
+    return a._insert$(n, m);
 };
 Array.prototype._insert$ = function (n) {
     var m = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         m[_i - 1] = arguments[_i];
     }
+    console.log.apply(console, m._flat());
     this.splice.apply(this, [n, 0].concat(m._flat()));
     return this;
 };
 Array.prototype._compact = function () {
-    return this.filter(function (v) { return v !== null; })
-        .filter(function (v) { return v !== undefined; })
-        .filter(function (v) { return v !== NaN; });
+    return this.filter(function (v) { return v; });
 };
 Array.prototype._compact$ = function () {
-    var a = this.filter(function (v) { return v !== null; })
-        .filter(function (v) { return v !== undefined; })
-        .filter(function (v) { return v !== NaN; });
+    var a = this._compact();
     return this._copy(a);
+};
+Array.prototype._chunk = function (n) {
+    var _this = this;
+    var l = this.length;
+    var m = n._ceil();
+    return util.range(0, l, m).map(function (i) { return _this.slice(i, i + m); });
+};
+Array.prototype._chunk$ = function (n) {
+    var a = this._chunk(n);
+    return this._copy(a);
+};
+Array.prototype._each = function (callback, thisObject) {
+    return this.reduce(function (result, element) {
+        result[result.length] = callback.call(thisObject, element);
+        return result;
+    }, []);
 };
