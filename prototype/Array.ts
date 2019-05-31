@@ -41,6 +41,8 @@ declare global {
     _insert$(n: number, ...m: any[]): any[]
     _compact(): any[]
     _compact$(): any[]
+    _chunk(n: number): any[]
+    _chunk$(n: number): any[]
   }
 }
 
@@ -264,5 +266,15 @@ Array.prototype._compact = function(): any[] {
 }
 Array.prototype._compact$ = function(): any[] {
   const a = this._compact()
+  return this._copy(a)
+}
+
+Array.prototype._chunk = function(n: number): any[] {
+  const l = this.length
+  const m = n._ceil()
+  return _util.range(0, l, m).map(i => this.slice(i, i + m))
+}
+Array.prototype._chunk$ = function(n: number): any[] {
+  const a = this._chunk(n)
   return this._copy(a)
 }
