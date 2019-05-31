@@ -1,6 +1,13 @@
 "use strict";
 exports.__esModule = true;
-require("./prototype/Prototype");
+require("./prototype/prototype");
+var readlineSync = require("readline-sync");
+var is = require("./is");
+exports.is = is;
+exports.input = function (s) {
+    if (s === void 0) { s = ''; }
+    return readlineSync.question(s);
+};
 exports.rand = function (n) { return Math.random() * n; };
 exports.randInt = function (n) { return exports.rand(n)._floor(); };
 exports.max = function () {
