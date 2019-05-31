@@ -43,6 +43,7 @@ declare global {
     _compact$(): any[]
     _chunk(n: number): any[]
     _chunk$(n: number): any[]
+    _each(callback: any, thisObject?: any): any[]
   }
 }
 
@@ -277,4 +278,11 @@ Array.prototype._chunk = function(n: number): any[] {
 Array.prototype._chunk$ = function(n: number): any[] {
   const a = this._chunk(n)
   return this._copy(a)
+}
+
+Array.prototype._each = function(callback: any, thisObject?: any): any[] {
+  return this.reduce(function(result, element) {
+    result[result.length] = callback.call(thisObject, element)
+    return result
+  }, [])
 }
