@@ -2,8 +2,8 @@ import * as _util from '../index'
 
 declare global {
   interface Array<T> {
-    _empty(): boolean
-    _equal(a: any[]): boolean
+    _isEmpty(): boolean
+    _isEqual(a: any[]): boolean
     _count(n: any): number
     _uniq(): any[]
     _uniq$(): any[]
@@ -47,11 +47,11 @@ declare global {
   }
 }
 
-Array.prototype._empty = function(): boolean {
+Array.prototype._isEmpty = function(): boolean {
   return this.length === 0
 }
 
-Array.prototype._equal = function(a: any[]): boolean {
+Array.prototype._isEqual = function(a: any[]): boolean {
   return JSON.stringify(this) === JSON.stringify(a)
 }
 

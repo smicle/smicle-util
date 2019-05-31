@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
-var util = require("../index");
-Array.prototype._empty = function () {
+var _util = require("../index");
+Array.prototype._isEmpty = function () {
     return this.length === 0;
 };
-Array.prototype._equal = function (a) {
+Array.prototype._isEqual = function (a) {
     return JSON.stringify(this) === JSON.stringify(a);
 };
 Array.prototype._count = function (n) {
@@ -31,7 +31,7 @@ Array.prototype._first = function (n) {
         return this[0];
     }
     else {
-        return util.range(n).map(function (i) { return _this[i]; });
+        return _util.range(n).map(function (i) { return _this[i]; });
     }
 };
 Array.prototype._last = function (n) {
@@ -60,11 +60,11 @@ Array.prototype._drop$ = function (n) {
     return this.splice(n);
 };
 Array.prototype._sample = function () {
-    var n = util.randInt(this.length);
+    var n = _util.randInt(this.length);
     return this[n];
 };
 Array.prototype._sample$ = function () {
-    var n = util.randInt(this.length);
+    var n = _util.randInt(this.length);
     return this._remove(n);
 };
 Array.prototype._asc = function (s) {
@@ -120,12 +120,12 @@ Array.prototype._rotate$ = function (n) {
 };
 Array.prototype._shuffle = function () {
     var a = this.concat();
-    return util.range(this.length).map(function (_) { return a._sample$(); });
+    return _util.range(this.length).map(function (_) { return a._sample$(); });
 };
 Array.prototype._shuffle$ = function () {
     var _this = this;
     var a = this.concat();
-    util.range(this.length).forEach(function (i) { return (_this[i] = a._sample$()); });
+    _util.range(this.length).forEach(function (i) { return (_this[i] = a._sample$()); });
     return this;
 };
 Array.prototype._flat = function () {
@@ -249,7 +249,7 @@ Array.prototype._chunk = function (n) {
     var _this = this;
     var l = this.length;
     var m = n._ceil();
-    return util.range(0, l, m).map(function (i) { return _this.slice(i, i + m); });
+    return _util.range(0, l, m).map(function (i) { return _this.slice(i, i + m); });
 };
 Array.prototype._chunk$ = function (n) {
     var a = this._chunk(n);

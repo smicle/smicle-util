@@ -1,5 +1,7 @@
 import './prototype/prototype'
 import * as readlineSync from 'readline-sync'
+import * as is from './is'
+export {is}
 
 export const input = (s = ''): string => readlineSync.question(s)
 
