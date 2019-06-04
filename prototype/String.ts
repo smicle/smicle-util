@@ -1,7 +1,8 @@
-export {}
+import * as _util from '../index'
+
 declare global {
   interface String {
-    _num(): number
+    _num(): number | string
     _pw(): string[]
     _splitNum(): number[]
     _spaceFill(n: number): string
@@ -9,8 +10,8 @@ declare global {
   }
 }
 
-String.prototype._num = function(): number {
-  return Number(this)
+String.prototype._num = function(): number | string {
+  return _util.isStrFinite(this) ? Number(this) : (this as string)
 }
 
 String.prototype._pw = function(): string[] {

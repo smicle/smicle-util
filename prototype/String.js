@@ -1,7 +1,8 @@
 "use strict";
 exports.__esModule = true;
+var _util = require("../index");
 String.prototype._num = function () {
-    return Number(this);
+    return _util.isStrFinite(this) ? Number(this) : this;
 };
 String.prototype._pw = function () {
     return this.split(' ');

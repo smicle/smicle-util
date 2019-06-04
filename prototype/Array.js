@@ -60,12 +60,14 @@ Array.prototype._drop$ = function (n) {
     return this.splice(n);
 };
 Array.prototype._sample = function () {
-    var n = _util.randInt(this.length);
-    return this[n];
+    var a = this.concat();
+    return a._sample$();
 };
 Array.prototype._sample$ = function () {
     var n = _util.randInt(this.length);
-    return this._remove(n);
+    var v = this[n];
+    this._remove$(n);
+    return v;
 };
 Array.prototype._asc = function (s) {
     if (s === void 0) { s = ''; }
@@ -107,10 +109,8 @@ Array.prototype._desc$ = function (s) {
 };
 Array.prototype._rotate = function (n) {
     if (n === void 0) { n = 1; }
-    n %= this.length;
     var a = this.concat();
-    a.unshift.apply(a, a.splice(n));
-    return a;
+    return a._rotate$(n);
 };
 Array.prototype._rotate$ = function (n) {
     if (n === void 0) { n = 1; }
@@ -123,20 +123,17 @@ Array.prototype._shuffle = function () {
     return _util.range(this.length).map(function (_) { return a._sample$(); });
 };
 Array.prototype._shuffle$ = function () {
-    var _this = this;
-    var a = this.concat();
-    _util.range(this.length).forEach(function (i) { return (_this[i] = a._sample$()); });
-    return this;
+    var a = this._shuffle();
+    return this._copy(a);
 };
 Array.prototype._flat = function () {
-    return this.toString()
-        .split(',')
-        .map(function (v) { return v._num(); });
+    var flattenDeep = function (l) {
+        return l.reduce(function (a, c) { return (Array.isArray(c) ? a.concat(flattenDeep(c)) : a.concat(c)); }, []);
+    };
+    return flattenDeep(this);
 };
 Array.prototype._flat$ = function () {
-    var a = this.toString()
-        .split(',')
-        .map(Number);
+    var a = this._flat();
     return this._copy(a);
 };
 Array.prototype._zip = function () {
@@ -151,17 +148,16 @@ Array.prototype._zip$ = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];
     }
-    var p = this.map(function (v, i) { return [v].concat(a.map(function (e) { return (e[i] ? e[i] : null); })); });
-    return this._copy(p);
+    return this._copy(this._zip.apply(this, a));
 };
+//
 Array.prototype._transpose = function () {
     var _a = this, a = _a[0], b = _a[1];
     return a.map(function (v, i) { return [v, b[i]]; });
 };
 Array.prototype._transpose$ = function () {
-    var _a = this, a = _a[0], b = _a[1];
-    var p = a.map(function (v, i) { return [v, b[i]]; });
-    return this._copy(p);
+    var a = this._transpose();
+    return this._copy(a);
 };
 Array.prototype._copy = function (a) {
     var _this = this;
@@ -175,14 +171,12 @@ Array.prototype._clear = function () {
 };
 Array.prototype._delete = function (s) {
     var a = this.concat();
-    var n = [];
-    a.map(function (v, i) { return v == s && n.push(i); });
-    return a._remove.apply(a, n);
+    return a._delete$(s);
 };
 Array.prototype._delete$ = function (s) {
-    var n = [];
-    this.map(function (v, i) { return v == s && n.push(i); });
-    this._remove$.apply(this, n);
+    this._remove$.apply(this, this.map(function (v, i) { return [v, i]; })
+        .filter(function (v) { return v._first() == s; })
+        .map(function (v) { return v._last(); }));
     return this;
 };
 Array.prototype._remove = function () {
@@ -190,36 +184,23 @@ Array.prototype._remove = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         n[_i] = arguments[_i];
     }
-    n._flat$();
     var a = this.concat();
-    if (n.length === 0) {
-        return undefined;
-    }
-    else if (n.length === 1) {
-        a.splice(n._first(), 1)._first();
-        return a;
-    }
-    else {
-        return a.filter(function (v) { return !n.includes(v); });
-    }
+    return a._remove$(n);
 };
 Array.prototype._remove$ = function () {
+    var _this = this;
     var n = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         n[_i] = arguments[_i];
     }
     n._flat$();
-    if (n.length === 0) {
-        return this;
-    }
-    else if (n.length === 1) {
+    if (n.length === 1) {
         this.splice(n._first(), 1)._first();
-        return this;
     }
-    else {
-        var a = this.filter(function (v) { return !n.includes(v); });
-        return this._copy(a);
+    else if (n.length > 1) {
+        n._desc().forEach(function (v) { return _this.splice(v, 1); });
     }
+    return this;
 };
 Array.prototype._insert = function (n) {
     var m = [];
@@ -234,7 +215,6 @@ Array.prototype._insert$ = function (n) {
     for (var _i = 1; _i < arguments.length; _i++) {
         m[_i - 1] = arguments[_i];
     }
-    console.log.apply(console, m._flat());
     this.splice.apply(this, [n, 0].concat(m._flat()));
     return this;
 };

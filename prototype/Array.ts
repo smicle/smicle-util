@@ -27,16 +27,16 @@ declare global {
     _shuffle$(): any[]
     _flat(): any[]
     _flat$(): any[]
-    _zip(): any[]
-    _zip$(): any[]
+    _zip(...a: any[]): any[]
+    _zip$(...a: any[]): any[]
     _transpose(): any[]
     _transpose$(): any[]
     _copy(a: any[]): any[]
     _clear(): any[]
     _delete(s: any): any[]
     _delete$(s: any): any[]
-    _remove(...n: number[]): any[]
-    _remove$(...n: number[]): any[]
+    _remove(...n: any[]): any[]
+    _remove$(...n: any[]): any[]
     _insert(n: number, ...m: any[]): any[]
     _insert$(n: number, ...m: any[]): any[]
     _compact(): any[]
@@ -111,12 +111,14 @@ Array.prototype._drop$ = function(n: number): any[] {
 }
 
 Array.prototype._sample = function(): any[] {
-  const n = _util.randInt(this.length)
-  return this[n]
+  const a = this.concat()
+  return a._sample$()
 }
 Array.prototype._sample$ = function() {
   const n = _util.randInt(this.length)
-  return this._remove(n)
+  const v = this[n]
+  this._remove$(n)
+  return v
 }
 
 Array.prototype._asc = function(s = '') {
@@ -152,10 +154,8 @@ Array.prototype._desc$ = function(s = ''): any[] {
 }
 
 Array.prototype._rotate = function(n = 1): any[] {
-  n %= this.length
   const a = this.concat()
-  a.unshift(...a.splice(n))
-  return a
+  return a._rotate$(n)
 }
 Array.prototype._rotate$ = function(n = 1): any[] {
   n %= this.length
@@ -168,20 +168,18 @@ Array.prototype._shuffle = function(): any[] {
   return _util.range(this.length).map(_ => a._sample$())
 }
 Array.prototype._shuffle$ = function(): any[] {
-  const a = this.concat()
-  _util.range(this.length).forEach(i => (this[i] = a._sample$()))
-  return this
+  const a = this._shuffle()
+  return this._copy(a)
 }
 
 Array.prototype._flat = function(): any[] {
-  return this.toString()
-    .split(',')
-    .map(v => v._num())
+  const flattenDeep = (l: any[]): any[] =>
+    l.reduce((a, c) => (Array.isArray(c) ? a.concat(flattenDeep(c)) : a.concat(c)), [])
+  return flattenDeep(this)
 }
+
 Array.prototype._flat$ = function(): any[] {
-  const a = this.toString()
-    .split(',')
-    .map(Number)
+  const a = this._flat()
   return this._copy(a)
 }
 
@@ -189,18 +187,17 @@ Array.prototype._zip = function(...a: any[]): any[][] {
   return this.map((v, i) => [v, ...a.map(e => (e[i] ? e[i] : null))])
 }
 Array.prototype._zip$ = function(...a: any[]): any[][] {
-  const p = this.map((v, i) => [v, ...a.map(e => (e[i] ? e[i] : null))])
-  return this._copy(p)
+  return this._copy(this._zip(...a))
 }
 
+//
 Array.prototype._transpose = function(): any[][] {
   const [a, b] = this
   return a.map((v: any, i: number) => [v, b[i]])
 }
 Array.prototype._transpose$ = function(): any[][] {
-  const [a, b] = this
-  const p = a.map((v: any, i: number) => [v, b[i]])
-  return this._copy(p)
+  const a = this._transpose()
+  return this._copy(a)
 }
 
 Array.prototype._copy = function(a: any[]): any[] {
@@ -216,40 +213,29 @@ Array.prototype._clear = function(): any[] {
 
 Array.prototype._delete = function(s): any[] {
   const a = this.concat()
-  const n: number[] = []
-  a.map((v, i) => v == s && n.push(i))
-  return a._remove(...n)
+  return a._delete$(s)
 }
 Array.prototype._delete$ = function(s): any[] {
-  const n: number[] = []
-  this.map((v, i) => v == s && n.push(i))
-  this._remove$(...n)
+  this._remove$(
+    ...this.map((v, i) => [v, i])
+      .filter(v => v._first() == s)
+      .map(v => v._last())
+  )
   return this
 }
 
-Array.prototype._remove = function(...n: number[]): any | any[] {
-  n._flat$()
+Array.prototype._remove = function(...n: any[]): any[] {
   const a = this.concat()
-  if (n.length === 0) {
-    return undefined
-  } else if (n.length === 1) {
-    a.splice(n._first(), 1)._first()
-    return a
-  } else {
-    return a.filter(v => !n.includes(v))
-  }
+  return a._remove$(n)
 }
-Array.prototype._remove$ = function(...n: number[]): any[] {
+Array.prototype._remove$ = function(...n: any[]): any[] {
   n._flat$()
-  if (n.length === 0) {
-    return this
-  } else if (n.length === 1) {
+  if (n.length === 1) {
     this.splice(n._first(), 1)._first()
-    return this
-  } else {
-    const a = this.filter(v => !n.includes(v))
-    return this._copy(a)
+  } else if (n.length > 1) {
+    n._desc().forEach(v => this.splice(v, 1))
   }
+  return this
 }
 
 Array.prototype._insert = function(n: number, ...m: any[]): any[] {
@@ -257,7 +243,6 @@ Array.prototype._insert = function(n: number, ...m: any[]): any[] {
   return a._insert$(n, m)
 }
 Array.prototype._insert$ = function(n: number, ...m: any[]): any[] {
-  console.log(...m._flat())
   this.splice(n, 0, ...m._flat())
   return this
 }
