@@ -63,7 +63,7 @@ Array.prototype._uniq = function(): any[] {
   return Array.from(new Set(this))
 }
 Array.prototype._uniq$ = function(): any[] {
-  const a = Array.from(new Set(this))
+  const a = this._uniq()
   return this._copy(a)
 }
 
@@ -71,7 +71,7 @@ Array.prototype._overlap = function(): any[] {
   return this.filter((v, i, a) => a.indexOf(v) === i && i !== a.lastIndexOf(v))
 }
 Array.prototype._overlap$ = function(): any[] {
-  const a = this.filter((v, i, a) => a.indexOf(v) === i && i !== a.lastIndexOf(v))
+  const a = this._overlap()
   return this._copy(a)
 }
 
@@ -94,8 +94,7 @@ Array.prototype._last = function(n = 1): any | any[] {
 
 Array.prototype._take = function(n: number): any[] {
   const a = this.concat()
-  a.splice(n)
-  return a
+  return a._take$(n)
 }
 Array.prototype._take$ = function(n: number): any[] {
   this.splice(n)
@@ -122,12 +121,8 @@ Array.prototype._sample$ = function() {
 }
 
 Array.prototype._asc = function(s = '') {
-  const p = this.concat()
-  if (s === '') {
-    return p.sort((a, b) => a - b)
-  } else {
-    return p.sort((a, b) => a[s] - b[s])
-  }
+  const a = this.concat()
+  return a._asc$(s)
 }
 Array.prototype._asc$ = function(s = ''): any[] {
   if (s === '') {
@@ -138,12 +133,8 @@ Array.prototype._asc$ = function(s = ''): any[] {
 }
 
 Array.prototype._desc = function(s = ''): any[] {
-  const p = this.concat()
-  if (s === '') {
-    return p.sort((a, b) => b - a)
-  } else {
-    return p.sort((a, b) => b[s] - a[s])
-  }
+  const a = this.concat()
+  return a._desc$(s)
 }
 Array.prototype._desc$ = function(s = ''): any[] {
   if (s === '') {
@@ -190,10 +181,8 @@ Array.prototype._zip$ = function(...a: any[]): any[][] {
   return this._copy(this._zip(...a))
 }
 
-//
 Array.prototype._transpose = function(): any[][] {
-  const [a, b] = this
-  return a.map((v: any, i: number) => [v, b[i]])
+  return _util.range(this[0].length).map(i => _util.range(this.length).map(j => this[j][i]))
 }
 Array.prototype._transpose$ = function(): any[][] {
   const a = this._transpose()

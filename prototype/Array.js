@@ -14,14 +14,14 @@ Array.prototype._uniq = function () {
     return Array.from(new Set(this));
 };
 Array.prototype._uniq$ = function () {
-    var a = Array.from(new Set(this));
+    var a = this._uniq();
     return this._copy(a);
 };
 Array.prototype._overlap = function () {
     return this.filter(function (v, i, a) { return a.indexOf(v) === i && i !== a.lastIndexOf(v); });
 };
 Array.prototype._overlap$ = function () {
-    var a = this.filter(function (v, i, a) { return a.indexOf(v) === i && i !== a.lastIndexOf(v); });
+    var a = this._overlap();
     return this._copy(a);
 };
 Array.prototype._first = function (n) {
@@ -45,8 +45,7 @@ Array.prototype._last = function (n) {
 };
 Array.prototype._take = function (n) {
     var a = this.concat();
-    a.splice(n);
-    return a;
+    return a._take$(n);
 };
 Array.prototype._take$ = function (n) {
     this.splice(n);
@@ -71,13 +70,8 @@ Array.prototype._sample$ = function () {
 };
 Array.prototype._asc = function (s) {
     if (s === void 0) { s = ''; }
-    var p = this.concat();
-    if (s === '') {
-        return p.sort(function (a, b) { return a - b; });
-    }
-    else {
-        return p.sort(function (a, b) { return a[s] - b[s]; });
-    }
+    var a = this.concat();
+    return a._asc$(s);
 };
 Array.prototype._asc$ = function (s) {
     if (s === void 0) { s = ''; }
@@ -90,13 +84,8 @@ Array.prototype._asc$ = function (s) {
 };
 Array.prototype._desc = function (s) {
     if (s === void 0) { s = ''; }
-    var p = this.concat();
-    if (s === '') {
-        return p.sort(function (a, b) { return b - a; });
-    }
-    else {
-        return p.sort(function (a, b) { return b[s] - a[s]; });
-    }
+    var a = this.concat();
+    return a._desc$(s);
 };
 Array.prototype._desc$ = function (s) {
     if (s === void 0) { s = ''; }
@@ -150,10 +139,9 @@ Array.prototype._zip$ = function () {
     }
     return this._copy(this._zip.apply(this, a));
 };
-//
 Array.prototype._transpose = function () {
-    var _a = this, a = _a[0], b = _a[1];
-    return a.map(function (v, i) { return [v, b[i]]; });
+    var _this = this;
+    return _util.range(this[0].length).map(function (i) { return _util.range(_this.length).map(function (j) { return _this[j][i]; }); });
 };
 Array.prototype._transpose$ = function () {
     var a = this._transpose();
