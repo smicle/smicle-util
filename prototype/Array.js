@@ -173,7 +173,7 @@ Array.prototype._remove = function () {
         n[_i] = arguments[_i];
     }
     var a = this.concat();
-    return a._remove$(n);
+    return a._remove$.apply(a, n);
 };
 Array.prototype._remove$ = function () {
     var _this = this;
@@ -186,6 +186,7 @@ Array.prototype._remove$ = function () {
         this.splice(n._first(), 1)._first();
     }
     else if (n.length > 1) {
+        ;
         n._desc().forEach(function (v) { return _this.splice(v, 1); });
     }
     return this;
@@ -196,7 +197,7 @@ Array.prototype._insert = function (n) {
         m[_i - 1] = arguments[_i];
     }
     var a = this.concat();
-    return a._insert$(n, m);
+    return a._insert$.apply(a, [n].concat(m));
 };
 Array.prototype._insert$ = function (n) {
     var m = [];
