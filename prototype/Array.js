@@ -181,7 +181,7 @@ Array.prototype._remove$ = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         n[_i] = arguments[_i];
     }
-    n._flat$();
+    n._flat$()._uniq$();
     if (n.length === 1) {
         this.splice(n._first(), 1)._first();
     }

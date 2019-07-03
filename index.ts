@@ -1,7 +1,4 @@
 import './prototype/prototype'
-import * as readlineSync from 'readline-sync'
-
-export const input = (s = ''): string => readlineSync.question(s)
 
 export const range = function(start: number, stop = 0, step = 1): number[] {
   switch (arguments.length) {
@@ -19,7 +16,6 @@ export const range = function(start: number, stop = 0, step = 1): number[] {
         return Array.from(Array(n._minusOnlyZero()), _ => start--).filter((_, i) => i % step == 0)
       } else {
         console.error(Error('range() arg 3 must not be zero'))
-        process.exit(1)
       }
   }
   return []
@@ -28,14 +24,15 @@ export const range = function(start: number, stop = 0, step = 1): number[] {
 export const rand = (n: number): number => Math.random() * n
 export const randInt = (n: number): number => rand(n)._floor()
 
-export const max = (...n: any[]): number => Math.max(...n._flat())
-export const min = (...n: any[]): number => Math.min(...n._flat())
-export const sum = (...n: any[]): number => n._flat().reduce((a, c) => a + c)
-export const mean = (...n: any[]): number => {
+export const max = (...n: unknown[]): number => Math.max(...(n._flat() as number[]))
+export const min = (...n: unknown[]): number => Math.min(...(n._flat() as number[]))
+export const sum = (...n: unknown[]): number => (n._flat() as number[]).reduce((a, c) => a + c)
+export const mean = (...n: unknown[]): number => {
   n._flat$()
   return sum(n) / n.length
 }
 
 export const isNumber = (v: any): boolean => typeof v === 'number'
 export const isFinite = (v: any): boolean => Number.isFinite(v)
-export const isStrFinite = (v: any): boolean => RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v)
+export const isStrFinite = (v: unknown): boolean =>
+  RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v as string)

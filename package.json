@@ -18,9 +18,6 @@
   },
   "homepage": "https://github.com/smicle/smicleUtil#readme",
   "dependencies": {
-    "@types/node": "^12.0.2",
-    "@types/readline-sync": "^1.4.3",
-    "readline-sync": "^1.4.9",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   }
 }

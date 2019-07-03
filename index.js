@@ -1,11 +1,6 @@
 "use strict";
 exports.__esModule = true;
 require("./prototype/prototype");
-var readlineSync = require("readline-sync");
-exports.input = function (s) {
-    if (s === void 0) { s = ''; }
-    return readlineSync.question(s);
-};
 exports.range = function (start, stop, step) {
     if (stop === void 0) { stop = 0; }
     if (step === void 0) { step = 1; }
@@ -26,7 +21,6 @@ exports.range = function (start, stop, step) {
             }
             else {
                 console.error(Error('range() arg 3 must not be zero'));
-                process.exit(1);
             }
     }
     return [];
@@ -64,4 +58,6 @@ exports.mean = function () {
 };
 exports.isNumber = function (v) { return typeof v === 'number'; };
 exports.isFinite = function (v) { return Number.isFinite(v); };
-exports.isStrFinite = function (v) { return RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v); };
+exports.isStrFinite = function (v) {
+    return RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v);
+};

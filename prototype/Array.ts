@@ -35,8 +35,8 @@ declare global {
     _clear(): Array<T>
     _delete(s: T): Array<T>
     _delete$(s: T): Array<T>
-    _remove(...n: any[]): Array<T>
-    _remove$(...n: any[]): Array<T>
+    _remove(...n: unknown[]): Array<T>
+    _remove$(...n: unknown[]): Array<T>
     _insert(n: number, ...m: Array<T> | Array<Array<T>>): Array<T>
     _insert$(n: number, ...m: Array<T> | Array<Array<T>>): Array<T>
     _compact(): Array<T>
@@ -213,12 +213,12 @@ Array.prototype._delete$ = function<T>(s: T): Array<T> {
   return this
 }
 
-Array.prototype._remove = function<T>(...n: any[]): Array<T> {
+Array.prototype._remove = function<T>(...n: unknown[]): Array<T> {
   const a = this.concat()
   return a._remove$(...n)
 }
-Array.prototype._remove$ = function<T>(...n: any[]): Array<T> {
-  n._flat$()
+Array.prototype._remove$ = function<T>(...n: unknown[]): Array<T> {
+  n._flat$()._uniq$()
   if (n.length === 1) {
     this.splice(n._first() as number, 1)._first()
   } else if (n.length > 1) {
