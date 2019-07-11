@@ -24,15 +24,22 @@ export const range = function(start: number, stop = 0, step = 1): number[] {
 export const rand = (n: number): number => Math.random() * n
 export const randInt = (n: number): number => rand(n)._floor()
 
-export const max = (...n: unknown[]): number => Math.max(...(n._flat() as number[]))
-export const min = (...n: unknown[]): number => Math.min(...(n._flat() as number[]))
-export const sum = (...n: unknown[]): number => (n._flat() as number[]).reduce((a, c) => a + c)
-export const mean = (...n: unknown[]): number => {
+export const plus = (a: number, b: number): number => a + b
+export const minus = (a: number, b: number): number => a - b
+export const multiple = (a: number, b: number): number => a * b
+export const division = (a: number, b: number): number => a / b
+export const remainder = (a: number, b: number): number => a % b
+export const exponent = (a: number, b: number): number => a ** b
+
+export const max = <T extends unknown[]>(...n: T): number => Math.max(...(n._flat() as number[]))
+export const min = <T extends unknown[]>(...n: T): number => Math.min(...(n._flat() as number[]))
+export const sum = <T extends unknown[]>(...n: T): number => (n._flat() as number[]).reduce(plus)
+export const mean = <T extends unknown[]>(...n: T): number => {
   n._flat$()
   return sum(n) / n.length
 }
 
-export const isNumber = (v: any): boolean => typeof v === 'number'
-export const isFinite = (v: any): boolean => Number.isFinite(v)
+export const isNumber = (v: unknown): boolean => typeof v === 'number'
+export const isFinite = (v: unknown): boolean => Number.isFinite(v as number)
 export const isStrFinite = (v: unknown): boolean =>
   RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v as string)

@@ -1,1 +1,3 @@
 # smicle-util
+
+npm publish

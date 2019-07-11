@@ -35,15 +35,15 @@ declare global {
     _clear(): Array<T>
     _delete(s: T): Array<T>
     _delete$(s: T): Array<T>
-    _remove(...n: unknown[]): Array<T>
-    _remove$(...n: unknown[]): Array<T>
+    _remove<T extends unknown[]>(...n: T): Array<T>
+    _remove$<T extends unknown[]>(...n: T): Array<T>
     _insert(n: number, ...m: Array<T> | Array<Array<T>>): Array<T>
     _insert$(n: number, ...m: Array<T> | Array<Array<T>>): Array<T>
     _compact(): Array<T>
     _compact$(): Array<T>
     _chunk(n: number): Array<Array<T>>
     _chunk$(n: number): Array<Array<T>>
-    _each(callback: any, thisObject?: any): any[]
+    _each(callback: unknown, thisObject?: unknown): unknown[]
   }
 }
 
@@ -213,11 +213,11 @@ Array.prototype._delete$ = function<T>(s: T): Array<T> {
   return this
 }
 
-Array.prototype._remove = function<T>(...n: unknown[]): Array<T> {
+Array.prototype._remove = function<T extends unknown[]>(...n: T): Array<T> {
   const a = this.concat()
   return a._remove$(...n)
 }
-Array.prototype._remove$ = function<T>(...n: unknown[]): Array<T> {
+Array.prototype._remove$ = function<T extends unknown[]>(...n: T): Array<T> {
   n._flat$()._uniq$()
   if (n.length === 1) {
     this.splice(n._first() as number, 1)._first()
@@ -254,9 +254,9 @@ Array.prototype._chunk$ = function<T>(n: number): Array<Array<T>> {
   return this._copy(a)
 }
 
-Array.prototype._each = function(callback: any, thisObject?: any): any[] {
+Array.prototype._each = function(callback: unknown, thisObject?: unknown): unknown[] {
   return this.reduce(function(result, element) {
-    result[result.length] = callback.call(thisObject, element)
+    result[result.length] = (callback as any).call(thisObject, element)
     return result
   }, [])
 }

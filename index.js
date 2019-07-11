@@ -27,6 +27,7 @@ exports.range = function (start, stop, step) {
 };
 exports.rand = function (n) { return Math.random() * n; };
 exports.randInt = function (n) { return exports.rand(n)._floor(); };
+exports.plus = function (a, b) { return a + b; };
 exports.max = function () {
     var n = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -46,7 +47,7 @@ exports.sum = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         n[_i] = arguments[_i];
     }
-    return n._flat().reduce(function (a, c) { return a + c; });
+    return n._flat().reduce(exports.plus);
 };
 exports.mean = function () {
     var n = [];
