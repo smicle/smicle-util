@@ -17,10 +17,10 @@ declare global {
     _drop$(n: number): Array<T>
     _sample(): T
     _sample$(): T
-    _asc(s?: T): Array<T>
-    _asc$(s?: T): Array<T>
-    _desc(s?: T): Array<T>
-    _desc$(s?: T): Array<T>
+    _asc(s?: string): Array<T>
+    _asc$(s?: string): Array<T>
+    _desc(s?: string): Array<T>
+    _desc$(s?: string): Array<T>
     _rotate(n?: number): Array<T>
     _rotate$(n?: number): Array<T>
     _shuffle(): Array<T>
