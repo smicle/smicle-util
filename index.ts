@@ -24,6 +24,8 @@ export const range = function(start: number, stop = 0, step = 1): number[] {
 export const rand = (n: number): number => Math.random() * n
 export const randInt = (n: number): number => rand(n)._floor()
 
+export const print = (m: any): void => console.log(m)
+
 export const plus = (a: number, b: number): number => a + b
 export const minus = (a: number, b: number): number => a - b
 export const multiple = (a: number, b: number): number => a * b
@@ -39,7 +41,9 @@ export const mean = <T extends unknown[]>(...n: T): number => {
   return sum(n) / n.length
 }
 
-export const isNumber = (v: unknown): boolean => typeof v === 'number'
-export const isFinite = (v: unknown): boolean => Number.isFinite(v as number)
-export const isStrFinite = (v: unknown): boolean =>
+export const isNumber = (v: unknown): v is number => typeof v === 'number'
+export const isFinite = (v: unknown): v is number => Number.isFinite(v as number)
+export const isStrFinite = (v: unknown): v is number | string =>
   RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v as string)
+
+// export const toNumber = <T extends number | string>(v: T): T extends number ? number | string

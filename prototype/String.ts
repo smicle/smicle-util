@@ -2,7 +2,7 @@ import * as _util from '../index'
 
 declare global {
   interface String {
-    _num(): number | string
+    _num(): number
     _pw(): string[]
     _splitNum(): number[]
     _spaceFill(n: number): string
@@ -10,8 +10,13 @@ declare global {
   }
 }
 
-String.prototype._num = function(): number | string {
-  return _util.isStrFinite(this) ? Number(this) : (this as string)
+String.prototype._num = function(): number {
+  const s = this.replace(/,/g, '')
+  if (_util.isStrFinite(s)) {
+    return Number(s)
+  } else {
+    throw new Error('Could not convert to a number')
+  }
 }
 
 String.prototype._pw = function(): string[] {

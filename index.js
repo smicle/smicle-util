@@ -27,6 +27,7 @@ exports.range = function (start, stop, step) {
 };
 exports.rand = function (n) { return Math.random() * n; };
 exports.randInt = function (n) { return exports.rand(n)._floor(); };
+exports.print = function (m) { return console.log(m); };
 exports.plus = function (a, b) { return a + b; };
 exports.minus = function (a, b) { return a - b; };
 exports.multiple = function (a, b) { return a * b; };
@@ -67,3 +68,4 @@ exports.isFinite = function (v) { return Number.isFinite(v); };
 exports.isStrFinite = function (v) {
     return RegExp(/^[-+]?[0-9]+(\.[0-9]+)?$/).test(v);
 };
+// export const toNumber = <T extends number | string>(v: T): T extends number ? number | string
